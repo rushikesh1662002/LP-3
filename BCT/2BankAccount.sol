@@ -1,30 +1,39 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.4.0;
-contract BankAccount{
-    uint256 public balance;
-    address public owner;
+pragma solidity >= 0.7.0;
+// Write  a  smart  contract  on  a  test  network,  for  Bank  account  of  a  customer  for
+  // following operations: Deposit money | Withdraw Money | Show balance
+contract Bank{
+    mapping(address => uint) public user_account;
+    mapping(address => bool) public user_exist;
 
-    constructor() {
-        owner=msg.sender;
-        balance=0;
-    }
-    // Function to deposit money into the bank account
-    function deposit(uint amount)public{
-        require(msg.sender==owner,"Only owner can deposit money");
-        balance+=amount;
-    }
-
-    // Function to withdraw money from the bank account
-    function withdraw(uint amount)public {
-        require(msg.sender==owner,"Only owner can deposit money");
-        require(amount<=balance,"Insufficient balance");
-        require(amount>0,"Give valid amount");
-        require(balance-amount>=500, "Minimum balance required 500");
-        balance-=amount;
+    function create_account() public payable returns(string memory){
+        require(user_exist[msg.sender] == false, "Account Already created!");
+        user_account[msg.sender] = msg.value;
+        user_exist[msg.sender] = true;
+        return "Account created";
     }
 
-    // Function to show balance of the bank account
-    function getBalance()public view returns(uint){
-        return balance;
+    function deposit(uint amount) public payable returns(string memory){
+        require(user_exist[msg.sender] == true, "Account not created!");
+        require(amount > 0, "Amount should be greater than 0");
+        user_account[msg.sender] += amount;
+        return "Amount deposisted sucessfully";
     }
+
+    function withdraw(uint amount) public payable returns(string memory){
+        require(user_exist[msg.sender] == true, "Account not created!");
+        require(amount > 0, "Amount should be greater than 0");
+        require(user_account[msg.sender] >= amount, "Amount is greater than money deposisted");
+        user_account[msg.sender] -= amount;
+        return "Amount withdrawn sucessfully";    
+    }
+
+    function account_balance() public view returns(uint){
+        return user_account[msg.sender];
+    }
+    
+    function account_exists() public view returns(bool){
+        return user_exist[msg.sender];
+    }
+
 }
