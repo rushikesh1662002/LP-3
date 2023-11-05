@@ -23,6 +23,7 @@ contract Bank{
     function withdraw(uint amount) public payable returns(string memory){
         require(user_exist[msg.sender] == true, "Account not created!");
         require(amount > 0, "Amount should be greater than 0");
+        require(balance-amount>=500, "Minimum balance required 500");
         require(user_account[msg.sender] >= amount, "Amount is greater than money deposisted");
         user_account[msg.sender] -= amount;
         return "Amount withdrawn sucessfully";    
