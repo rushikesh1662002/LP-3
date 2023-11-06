@@ -25,7 +25,6 @@ contract Bank{
         require(amount > 0, "Amount should be greater than 0");
         require(balance-amount>=500, "Minimum balance required 500");
         require(user_account[msg.sender] >= amount, "Amount is greater than money deposisted");
-        require(user_account[msg.sender] - amount >=500,"Minimum 500 balance require");
         user_account[msg.sender] -= amount;
         return "Amount withdrawn sucessfully";    
     }
