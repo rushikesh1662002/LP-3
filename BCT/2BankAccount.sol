@@ -24,6 +24,7 @@ contract Bank{
         require(user_exist[msg.sender] == true, "Account not created!");
         require(amount > 0, "Amount should be greater than 0");
         require(user_account[msg.sender] >= amount, "Amount is greater than money deposisted");
+        require(user_account[msg.sender] - amount >=500,"Minimum 500 balance require");
         user_account[msg.sender] -= amount;
         return "Amount withdrawn sucessfully";    
     }
